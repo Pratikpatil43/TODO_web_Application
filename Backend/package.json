@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pratikpatil43/TODO_web_Application.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pratikpatil43/TODO_web_Application/issues"
+  },
+  "homepage": "https://github.com/Pratikpatil43/TODO_web_Application#readme",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.6.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.15",
+    "nodemon": "^3.1.4"
+  }
+}
