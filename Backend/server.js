@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./DBconfig/DB')
+const UserRoute  = require('./Routes/userRoute')
 
 // Load environment variables from .env file (if using dotenv)
 dotenv.config();
@@ -13,6 +14,9 @@ const app = express();
 // Use the dependencies in the proper way
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+//route import
+app.use('/user',UserRoute);
 
 //Database connection
 connectDB()
