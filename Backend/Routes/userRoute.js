@@ -67,7 +67,7 @@ router.post('/login', async (req,res)=>{
 
 
 
-//profile
+//usertasks
 
 
 router.post('/profile', async (req, res) => {
@@ -84,7 +84,7 @@ router.post('/profile', async (req, res) => {
         const user = await User.findById(decoded?.id);
         userData = {
             id: user.id,
-            username: user.username,
+            username: user.username ,
             email: user.email
         }
         if (!user) {

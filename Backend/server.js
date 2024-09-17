@@ -4,6 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./DBconfig/DB')
 const UserRoute  = require('./Routes/userRoute')
+const TaskRoute = require('./Routes/TaskRoute')
 
 // Load environment variables from .env file (if using dotenv)
 dotenv.config();
@@ -17,6 +18,9 @@ app.use(express.json());
 
 //route import
 app.use('/user',UserRoute);
+app.use('/user',TaskRoute);
+app.use('/user',TaskRoute);
+
 
 //Database connection
 connectDB()
