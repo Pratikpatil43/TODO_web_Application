@@ -1,103 +1,106 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/Users')
+const User = require('../models/Users');
 const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken")
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const Tasks = require('../models/Tasks');
 
-const { promisify } = require('util');
+// Secret key for JWT
+const secretKey = "jfjhjfdfldjfkdhfksjgjsdkg4758yiuht5h89t5yte5jthe5ty54utrt4$%^^%&%^%&^hgfdhufb";
 
-const verifyToken = promisify(jwt.verify);
-
-const secretkey = "jfjhjfdfldjfkdhfksjgjsdkg4758yiuht5h89t5yte5jthe5ty54utrt4$%^^%&%^%&^hgfdhufb"
-
-//Register
-
-router.post('/register', async (req,res)=>{
+// Register route
+router.post('/register', async (req, res) => {
     try {
-        const {email, username, password} = req.body;
-        if (!email, !username, !password) return res.status(400).json({ status:false, message:"All fields are required"});
+        const { email, username, password } = req.body;
 
-        const existingUser = await User.findOne({email})
-
-        if(existingUser) return res.status(400).json({ status:false, message:"Email already registered"})
-
-            const hashPassword = await bcrypt.hash(password,10)
-
-            const newUser = new User({username,email,password:hashPassword});
-            await newUser.save();
-
-
-            return res.status(201).json({ status:true, message:"Registered Successfull"})
-        
-        return
-        
-    } catch (error) {
-        
-    }
-})
-
-
-//login
-
-router.post('/login', async (req,res)=>{
-    try {
-        const {username, password} = req.body;
-        if (!username || !password) return res.status(400).json({ status:false, message:"All fields are required"});
-
-        const user = await User.findOne({username})
-
-        if(!user || !(await bcrypt.compare(password,user.password))){
-            return res.status(400).json({status:true, message:"Invalid credentials"})
+        // Check if all required fields are provided
+        if (!email || !username || !password) {
+            return res.status(400).json({ status: false, message: "All fields are required" });
         }
 
-        const token = jwt.sign({id:user._id, username:user.username},secretkey, { expiresIn: '1hr'})
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ status: false, message: "Email already registered" });
+        }
 
+        // Hash the password before saving
+        const hashPassword = await bcrypt.hash(password, 10);
 
+        // Create and save new user
+        const newUser = new User({ username, email, password: hashPassword });
+        await newUser.save();
 
-            return res.status(201).json({ status:true, message:"Login Successfull",token: token})
-        
-        return
-        
+        // Respond with success
+        return res.status(201).json({ status: true, message: "Registered Successfully" });
+
     } catch (error) {
-        return res.status(201).json({ status:true, message:"something went wrong",error: error.message})
-
-        
+        console.error(error);
+        return res.status(500).json({ status: false, message: "Something went wrong", error: error.message });
     }
-})
+});
 
-
-
-//usertasks
-
-
-router.post('/profile', async (req, res) => {
+// Login route
+router.post('/login', async (req, res) => {
     try {
-        const token = req.headers?.authorization?.split(' ')[1]; // Correct the token split
+        const { username, password } = req.body;
+
+        // Check if all required fields are provided
+        if (!username || !password) {
+            return res.status(400).json({ status: false, message: "All fields are required" });
+        }
+
+        // Find user by username
+        const user = await User.findOne({ username });
+
+        // Validate user credentials
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(400).json({ status: false, message: "Invalid credentials" });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '28h' });
+
+        // Respond with token
+        return res.status(200).json({ status: true, message: "Login Successful", token });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ status: false, message: "Something went wrong", error: error.message });
+    }
+});
+
+// Profile route to fetch all tasks for the authenticated user - Authenticated users only
+router.get('/profile', async (req, res) => {
+    try {
+        // Extract token from Authorization header
+        const token = req.headers?.authorization?.split(' ')[1];
+
+        // Check if token is provided
         if (!token) {
-            return res.status(400).json({ status: false, message: "Access Denied" });
+            return res.status(401).json({ status: false, message: "Access Denied. No token provided." });
         }
 
-        // Verify token and decode
-        const decoded = await verifyToken(token, secretkey);  // Promisified version of jwt.verify
+        // Verify token and extract user ID
+        const decoded = jwt.verify(token, secretKey);
+        const userId = decoded.id; // JWT should contain user's ID in the `id` field
 
-        // Find user by decoded id
-        const user = await User.findById(decoded?.id);
-        userData = {
-            id: user.id,
-            username: user.username ,
-            email: user.email
-        }
-        if (!user) {
-            return res.status(404).json({ status: false, message: "User not found" });
+        // Find all tasks associated with the user ID
+        const tasks = await Tasks.find({ userId });
+
+        // Check if any tasks are found
+        if (tasks.length === 0) {
+            return res.status(404).json({ status: false, message: "No tasks found for the user" });
         }
 
-        // Return profile data
-        return res.status(200).json({ status: true, message: "Profile Data", data: userData });
+        // Respond with tasks data
+        return res.status(200).json({ status: true, message: "Tasks fetched successfully", data: tasks });
 
     } catch (error) {
+        console.error(error);
         return res.status(500).json({ status: false, message: "Something went wrong", error: error.message });
     }
 });
 
 module.exports = router;
-
