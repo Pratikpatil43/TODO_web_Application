@@ -1,0 +1,99 @@
+/* components/Navbar/Navbar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #343a40; /* Dark background */
+  padding: 1.5rem 2rem; /* Increased vertical padding */
+  position: relative;
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.navbar:hover {
+  background-color: #495057; /* Slightly lighter on hover */
+}
+
+.navbar-brand a {
+  color: white;
+  font-size: 1.5rem;
+  text-decoration: none;
+  font-weight: bold; /* Bold text */
+}
+
+.navbar-toggle {
+  display: none; /* Hidden on large screens */
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.bar {
+  height: 4px;
+  width: 25px;
+  background-color: white;
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+.navbar-links {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li {
+  margin-left: 30px; /* Increased margin for more space between items */
+  position: relative; /* For the decorative line */
+}
+
+.navbar-links li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -15px; /* Positioning of the line */
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px; /* Height of the line */
+  width: 2px; /* Thickness of the line */
+  background-color: white; /* Color of the line */
+}
+
+.navbar-links a {
+  color: white;
+  text-decoration: none;
+  padding: 12px 16px; /* Increased padding for better click area */
+  transition: color 0.3s; /* Smooth color transition */
+}
+
+.navbar-links a:hover {
+  color: #ffc107; /* Highlight color on hover */
+  padding-left: 20px; /* Subtle slide effect */
+}
+
+.navbar-links.open {
+  display: flex; /* Show links when open */
+  flex-direction: column; /* Stack links */
+  position: absolute; /* Positioning */
+  top: 60px; /* Below the navbar */
+  left: 0;
+  right: 0;
+  background-color: #343a40; /* Same background as navbar */
+  z-index: 1;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  padding: 10px 0; /* Space around links */
+}
+
+.navbar-links.open li {
+  margin: 10px 0; /* Increased vertical spacing when open */
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none; /* Hide links by default */
+  }
+
+  .navbar-toggle {
+    display: flex; /* Show hamburger icon */
+  }
+}
