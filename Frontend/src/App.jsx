@@ -6,6 +6,7 @@ import Login from './components/Login/Login';
 import Navbar from './components/Navbar/Navbar';
 import toast, { Toaster } from 'react-hot-toast';
 
+
 const App = () => {
   return (
     <>

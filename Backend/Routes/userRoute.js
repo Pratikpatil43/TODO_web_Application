@@ -4,8 +4,9 @@ const User = require('../models/Users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const secretKey = "gkifjgufhguhidjfoedi$^%&%%*456687546"; // Change this to a secure key
+const secretKey = "gkifjgufhguhidjfoedi$^%&%%*456687546"; // Use a strong and secure secret key
 
+// Registration route
 router.post('/register', async (req, res) => {
     try {
         const { email, username, password } = req.body;
@@ -30,6 +31,53 @@ router.post('/register', async (req, res) => {
 
     } catch (error) {
         console.error("Registration error:", error.message);
+        return res.status(500).json({ status: false, message: "Something went wrong", error: error.message });
+    }
+});
+
+// Middleware for JWT Authentication
+const authenticateJWT = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Check if token exists
+
+    if (!token) {
+        return res.sendStatus(403); // Forbidden
+    }
+
+    jwt.verify(token, secretKey, (err, user) => {
+        if (err) {
+            return res.sendStatus(403); // Forbidden
+        }
+        req.user = user; // Set user info to request
+        next();
+    });
+};
+
+// Login route
+router.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Check if the user exists
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ status: false, message: "Invalid username" });
+        }
+
+        // Validate the password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) {
+            return res.status(400).json({ status: false, message: "Invalid password" });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ id: user._id, username: user.username }, secretKey, {
+            expiresIn: '1h', // Token expires in 1 hour
+        });
+
+        return res.status(200).json({ status: true, token });
+    } catch (error) {
+        console.error("Login error:", error.message);
         return res.status(500).json({ status: false, message: "Something went wrong", error: error.message });
     }
 });

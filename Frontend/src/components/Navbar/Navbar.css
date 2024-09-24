@@ -97,3 +97,38 @@
     display: flex; /* Show hamburger icon */
   }
 }
+
+
+/* General styles for links */
+.navbar-links li {
+  list-style: none;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.navbar-links a, .logout-link {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Hover effect for links */
+.navbar-links a:hover, .logout-link:hover {
+  color: #007BFF; /* Change to the color you prefer for hover */
+}
+
+/* Styling for logout to match other links */
+.logout-link {
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Add some padding or margin for spacing */
+.navbar-links li {
+  padding: 0 10px;
+}
+
