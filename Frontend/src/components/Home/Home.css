@@ -1,0 +1,116 @@
+/* General reset to make sure there's consistent styling across browsers */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9; /* Soft white background */
+  color: #333; /* Neutral text color */
+}
+
+/* Container styles */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+/* Header section */
+.header {
+  text-align: center;
+  padding: 20px;
+}
+
+.main-heading {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #2a2a2a;
+  margin-bottom: 10px;
+}
+
+.sub-heading {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.action-message {
+  font-size: 1rem;
+  color: #999;
+  margin-bottom: 30px;
+}
+
+/* CTA button styled as a button */
+.cta-button {
+  display: inline-block; /* Behave like a button */
+  background-color: #4CAF50; /* Green background */
+  color: #fff; /* White text */
+  padding: 15px 30px; /* Button padding */
+  border: none; /* Remove border */
+  border-radius: 8px; /* Rounded corners */
+  font-size: 1.2rem; /* Text size */
+  cursor: pointer; /* Show pointer on hover */
+  transition: background-color 0.3s ease; /* Smooth background change */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold; /* Bold text */
+  text-align: center; /* Center text */
+}
+
+.cta-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.cta-button:focus {
+  outline: none; /* Remove focus outline */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-heading {
+    font-size: 2.5rem;
+  }
+
+  .sub-heading {
+    font-size: 1.3rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .cta-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-heading {
+    font-size: 2rem;
+  }
+
+  .sub-heading {
+    font-size: 1.1rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .cta-button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}

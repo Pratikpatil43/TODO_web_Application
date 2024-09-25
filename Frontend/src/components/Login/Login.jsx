@@ -29,7 +29,7 @@ const Login = () => {
         toast.success('Login successful!');
 
         // Redirect to a protected route after successful login
-        navigate('/');
+        navigate('/tasks');
 
       } else {
         toast.error('Login failed! Please check your credentials.');
@@ -45,7 +45,7 @@ const Login = () => {
 
   return (
     <div className="register-container">
-    <h2>Register</h2>
+    <h2>Login</h2>
     <form className="register-form" onSubmit={handleLogin}>
       <div className="form-group mb-3">
         <label htmlFor="username" className="form-label">Username</label>

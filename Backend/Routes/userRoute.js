@@ -4,7 +4,7 @@ const User = require('../models/Users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const secretKey = "gkifjgufhguhidjfoedi$^%&%%*456687546"; // Use a strong and secure secret key
+const secretKey = "jfjhjfdfldjfkdhfksjgjsdkg4758yiuht5h89t5yte5jthe5ty54utrt4$%^^%&%^%&^hgfdhufb"; // Use a strong and secure secret key
 
 // Registration route
 router.post('/register', async (req, res) => {

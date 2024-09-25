@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
 // Secret key for JWT
-const secretKey = "jfjhjfdfldjfkdhfksjgjsdkg4758yiuht5h89t5yte5jthe5ty54utrt4$%^^%&%^%&^hgfdhufb";
+const secretKey = process.env.JWT_SECRET || "jfjhjfdfldjfkdhfksjgjsdkg4758yiuht5h89t5yte5jthe5ty54utrt4$%^^%&%^%&^hgfdhufb";
 
 // Creating a task
 router.post('/createTasks', async (req, res) => {
@@ -26,7 +26,13 @@ router.post('/createTasks', async (req, res) => {
         }
 
         // Verify token and extract user ID
-        const decoded = jwt.verify(token, secretKey);
+        let decoded;
+        try {
+            decoded = jwt.verify(token, secretKey);
+        } catch (err) {
+            return res.status(403).json({ message: "Invalid or expired token", error: err.message });
+        }
+
         const userId = decoded.id;
 
         // Validate that the userId is a valid ObjectId
@@ -53,44 +59,66 @@ router.post('/createTasks', async (req, res) => {
     }
 });
 
-// Accessing all tasks
-router.get('/findtask', async (req, res) => {
+// Get tasks of the authenticated user
+router.get('/tasks', async (req, res) => {
     try {
-        // Fetch all tasks
-        const tasks = await Task.find(); // Use Task model here
+        // Extract token from Authorization header
+        const token = req.headers?.authorization?.split(' ')[1];
+
+        // Check if token is provided
+        if (!token) {
+            return res.status(401).json({ message: "Access Denied. No token provided." });
+        }
+
+        // Verify token and extract user ID
+        let decoded;
+        try {
+            decoded = jwt.verify(token, secretKey);
+        } catch (err) {
+            return res.status(403).json({ message: "Invalid or expired token", error: err.message });
+        }
+
+        const userId = decoded.id;
+
+        // Fetch tasks for the authenticated user
+        const tasks = await Task.find({ userId: userId });
 
         // Check if any tasks are found
         if (tasks.length === 0) {
-            return res.status(404).json({ message: 'No tasks found' });
+            return res.status(404).json({ message: 'No tasks found for this user' });
         }
 
-        // Return all tasks
+        // Return the user's tasks
         return res.status(200).json(tasks);
 
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error);
         return res.status(500).json({ message: 'Something went wrong', error: error.message });
     }
 });
 
-// Updating a task
+// Updating a task (authenticated user)
 router.patch('/updatetask/:id', async (req, res) => {
     try {
-        // Extract task ID from the route parameters
-        const taskId = req.params.id;
+        const token = req.headers?.authorization?.split(' ')[1];
+        if (!token) return res.status(401).json({ message: "Access Denied. No token provided." });
+        const decoded = jwt.verify(token, secretKey);
+        const userId = decoded.id;
 
-        // Extract update data from the request body
+        const taskId = req.params.id;
         const updateData = req.body;
 
-        // Find the task by ID and update it with the provided data
-        const updatedTask = await Task.findByIdAndUpdate(taskId, updateData, { new: true, runValidators: true });
+        // Find the task by ID and update it only if it belongs to the authenticated user
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: taskId, userId: userId },
+            updateData,
+            { new: true, runValidators: true }
+        );
 
-        // Check if the task was found and updated
         if (!updatedTask) {
-            return res.status(404).json({ message: 'Task not found' });
+            return res.status(404).json({ message: 'Task not found or not authorized' });
         }
 
-        // Respond with the updated task
         res.json({ message: 'Task updated successfully!', task: updatedTask });
     } catch (error) {
         console.error(error);
@@ -98,23 +126,24 @@ router.patch('/updatetask/:id', async (req, res) => {
     }
 });
 
-// Deleting a task
+// Deleting a task (authenticated user)
 router.delete('/deletetask/:id', async (req, res) => {
     try {
-        // Extract task ID from the route parameters
+        const token = req.headers?.authorization?.split(' ')[1];
+        if (!token) return res.status(401).json({ message: "Access Denied. No token provided." });
+        const decoded = jwt.verify(token, secretKey);
+        const userId = decoded.id;
+
         const taskId = req.params.id;
 
-        // Find and delete the task by ID
-        const deletedTask = await Task.findByIdAndDelete(taskId);
+        // Find and delete the task only if it belongs to the authenticated user
+        const deletedTask = await Task.findOneAndDelete({ _id: taskId, userId: userId });
 
-        // Check if the task was found and deleted
         if (!deletedTask) {
-            return res.status(404).json({ message: 'Task not found to delete' });
+            return res.status(404).json({ message: 'Task not found or not authorized' });
         }
 
-        // Respond with success message
         return res.status(200).json({ message: 'Task deleted successfully' });
-
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Something went wrong', error: error.message });
