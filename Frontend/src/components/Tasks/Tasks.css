@@ -1,0 +1,245 @@
+.tasks-container {
+  display: flex;
+  background-color: #f7f7f7;
+  height: 100vh;
+  padding: 20px;
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+}
+
+.left-panel {
+  flex: 1;
+  background: linear-gradient(135deg, #ffccbc, #d1c4e9); /* Beautiful gradient */
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  transition: transform 0.3s;
+  min-width: 300px; /* Set a minimum width for left panel */
+}
+
+.left-panel h2 {
+  color: #ff5722; /* Header color */
+}
+
+.task-counts {
+  margin-bottom: 20px;
+}
+
+.close-icon {
+  cursor: pointer;
+}
+
+.task-counts p {
+  margin: 5px 0;
+  font-weight: bold;
+  color: #4a148c; /* Task count color */
+}
+
+.filter-sort {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-input {
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  transition: width 0.3s, background-color 0.3s;
+  margin-bottom: 10px;
+}
+
+.search-btn {
+  background-color: #ff5722; /* Button color */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-btn:hover {
+  background-color: #e64a19; /* Darker shade on hover */
+}
+
+.main-content {
+  flex: 3;
+  margin-left: 20px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  min-width: 300px; /* Set a minimum width for main content */
+}
+
+.create-task-btn {
+  background-color: #ff7043; /* Red-orange color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-task-btn:hover {
+  background-color: #ff5722; /* Darker shade on hover */
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%; /* Responsive width */
+  max-width: 400px; /* Maximum width for larger screens */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.search-results {
+  margin-top: 20px;
+}
+
+.task-list,
+.task-item {
+  margin-top: 20px;
+}
+
+.task-item {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+}
+
+.task-item:hover {
+  transform: translateY(-5px);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-desc {
+  font-size: 1rem;
+  color: #666;
+}
+
+.task-due {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.task-status {
+  font-weight: bold;
+}
+
+.task-status.pending {
+  color: orange;
+}
+
+.task-status.completed {
+  color: green;
+}
+
+.task-status.notdone {
+  color: red;
+}
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.delete-btn,
+.update-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.update-btn {
+  background-color: #4caf50;
+}
+
+.delete-btn:hover,
+.update-btn:hover {
+  opacity: 0.8;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .tasks-container {
+    flex-direction: column; /* Stack panels vertically on smaller screens */
+    height: auto; /* Allow height to adjust based on content */
+  }
+
+  .left-panel {
+    margin-bottom: 20px; /* Add space between panels */
+  }
+
+  .main-content {
+    margin-left: 0; /* Remove left margin */
+  }
+
+  .modal-content {
+    width: 90%; /* Ensure modal takes most of the width */
+  }
+
+  .create-task-btn {
+    padding: 8px 16px; /* Reduce padding on smaller screens */
+  }
+
+  .search-btn {
+    padding: 8px 12px; /* Reduce padding on smaller screens */
+  }
+
+  .task-item {
+    padding: 12px; /* Reduce padding for task items */
+  }
+}
+
+@media (max-width: 480px) {
+  .task-counts p {
+    font-size: 14px; /* Reduce font size for task counts */
+  }
+
+  .search-input {
+    padding: 8px; /* Reduce padding for search input */
+  }
+}
