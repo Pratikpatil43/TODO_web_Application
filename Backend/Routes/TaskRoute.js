@@ -60,7 +60,7 @@ router.post('/createTasks', async (req, res) => {
 });
 
 // Get tasks of the authenticated user
-router.get('/tasks', async (req, res) => {
+router.get('/getTasks', async (req, res) => {
     try {
         // Extract token from Authorization header
         const token = req.headers?.authorization?.split(' ')[1];

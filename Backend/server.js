@@ -19,7 +19,7 @@ app.use(express.json());
 // Define CORS configuration
 const corsOptions = {
     origin: 'http://localhost:5173', // Replace with your frontend's domain
-    methods: 'GET,POST,PUT,DELETE', // Specify the allowed methods
+    methods: 'GET,POST,PUT,DELETE,PATCH', // Specify the allowed methods
     allowedHeaders: 'Content-Type,Authorization', // Specify the allowed headers
     credentials: true, // Enable cookies if needed
 };

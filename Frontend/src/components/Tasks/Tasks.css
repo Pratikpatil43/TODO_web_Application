@@ -202,6 +202,33 @@
   opacity: 0.8;
 }
 
+
+.main-content {
+  flex: 3;
+  margin-left: 20px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  min-width: 300px; /* Set a minimum width for main content */
+}
+
+.create-task-btn {
+  background-color: #ff7043; /* Red-orange color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 20px; /* Add space below the button */
+}
+
+.create-task-btn:hover {
+  background-color: #ff5722; /* Slightly darker shade on hover */
+}
+
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .tasks-container {
