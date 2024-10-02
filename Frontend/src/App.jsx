@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';  // Import Toaster component
 import Register from './components/Register/Register';
 import Home from './components/Home/Home';
 import Login from './components/Login/Login';
@@ -32,6 +33,9 @@ const App = () => {
           <Route path='*' element={<Home />} />
         </Routes>
       </Router>
+      
+      {/* Include Toaster for toast notifications */}
+      <Toaster position="top-right" reverseOrder={false} />
     </>
   );
 };

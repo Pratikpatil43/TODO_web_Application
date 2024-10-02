@@ -10,10 +10,26 @@ const Tasks = () => {
     const [tasks, setTasks] = useState([]);
     const [taskName, setTaskName] = useState('');
     const [description, setDescription] = useState('');
-    const [dueTime, setDueTime] = useState('');
     const [taskAction, setTaskAction] = useState('Pending');
     const [selectedTaskId, setSelectedTaskId] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
+    const [dueTime, setDueTime] = useState("");
+
+    // Function to format date and time into 12-hour format with AM/PM
+    const formatDateTime = (dateTime) => {
+        if (!dateTime) return "";
+
+        const options = {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true, // Enable 12-hour format with AM/PM
+        };
+
+        return new Date(dateTime).toLocaleString("en-US", options);
+    };
 
     const toggleModal = () => {
         setShowModal(!showModal);
@@ -47,7 +63,7 @@ const Tasks = () => {
             setTasks(response.data);
         } catch (error) {
             console.error("Error fetching user tasks:", error);
-            toast.error("Failed to fetch tasks.");
+            toast.error("Failed to fetch tasks or tasks not found.");
         }
     };
 
@@ -88,8 +104,10 @@ const Tasks = () => {
                 });
                 toast.success("Task created successfully.");
             }
+
+            // Refresh tasks and close modal
+            fetchUserTasks();
             toggleModal();
-            fetchUserTasks(); // Refresh tasks after create/update
         } catch (error) {
             console.error("Error creating/updating task:", error);
             toast.error("Failed to create/update task.");
@@ -114,14 +132,20 @@ const Tasks = () => {
         }
 
         try {
+            // Optimistically update the UI before the backend call
+            const updatedTasks = tasks.filter(task => task._id !== taskId);
+            setTasks(updatedTasks);
+
             await axios.delete(`http://localhost:3000/tasks/deleteTask/${taskId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
+
             toast.success("Task deleted successfully.");
-            fetchUserTasks(); // Refresh tasks after deletion
         } catch (error) {
             console.error("Error deleting task:", error);
             toast.error("Failed to delete task.");
+            // Optionally, revert optimistic UI update if delete fails
+            fetchUserTasks();
         }
     };
 
@@ -154,14 +178,17 @@ const Tasks = () => {
                         onChange={handleSearch}
                     />
                     <button className="search-btn">Search</button>
+                    <div className='Task-workspace'>
+                        <input type="text" placeholder='Enter your task workspace name' />
+                    </div>
                 </div>
             </div>
-            
+
             <div className="main-content">
                 <button className="create-task-btn" onClick={toggleModal}>
                     Create Task
                 </button>
-                {filteredTasks.length > 0 ? ( 
+                {filteredTasks.length > 0 ? (
                     filteredTasks.map(task => (
                         <div key={task._id} className="task-item">
                             <div className="task-header">
@@ -184,7 +211,7 @@ const Tasks = () => {
             {showModal && (
                 <div className="modal" onClick={toggleModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <CloseIcon className="close-icon" onClick={toggleModal} />
+                        <CloseIcon className="close-icon" onClick={toggleModal} /><br />
                         <form onSubmit={handleCreateOrUpdateTask}>
                             <div className="input-group">
                                 <label>Task Name</label>
@@ -209,8 +236,9 @@ const Tasks = () => {
                                     type="datetime-local"
                                     value={dueTime}
                                     onChange={(e) => setDueTime(e.target.value)}
-                                    required
-                                />
+                                    required />
+                                <p>Formatted Due Time (12-Hour Format):</p>
+                                {dueTime && <p>{formatDateTime(dueTime)}</p>}
                             </div>
                             <div className="input-group">
                                 <label>Task Status</label>

@@ -26,6 +26,9 @@
 
 .close-icon {
   cursor: pointer;
+  position: absolute;
+  left: 125vh;
+  bottom: 75vh;
 }
 
 .task-counts p {
