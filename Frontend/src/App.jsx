@@ -35,7 +35,8 @@ const App = () => {
       </Router>
       
       {/* Include Toaster for toast notifications */}
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
+
     </>
   );
 };

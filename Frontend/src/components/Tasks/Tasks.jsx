@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Tasks.css';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -163,6 +163,7 @@ const Tasks = () => {
 
     return (
         <div className="tasks-container">
+            <Toaster position="top-center" reverseOrder={false} />
             <div className="left-panel">
                 <h2>Task Manager</h2>
                 <div className="task-counts">
@@ -177,9 +178,10 @@ const Tasks = () => {
                         placeholder="Search tasks..."
                         onChange={handleSearch}
                     />
-                    <button className="search-btn">Search</button>
-                    <div className='Task-workspace'>
-                        <input type="text" placeholder='Enter your task workspace name' />
+                    <button className="search-btn">Search</button><br /><br />
+                    <div>
+                        <p><center><b>Task Hub</b></center></p>
+                        <input type="text" className='Task-workspace' placeholder='Enter your task workspace name' />
                     </div>
                 </div>
             </div>

@@ -60,6 +60,15 @@
   transition: background-color 0.3s;
 }
 
+.Task-workspace{
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  transition: width 0.3s, background-color 0.3s;
+  margin-bottom: 10px;
+  width: 45vh;
+}
+
 .search-btn:hover {
   background-color: #e64a19; /* Darker shade on hover */
 }
